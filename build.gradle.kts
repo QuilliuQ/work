@@ -19,6 +19,7 @@ dependencies {
     implementation("org.json:json:20220320")
     implementation("io.insert-koin:koin-core:$koin_version")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.2")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:1.6.21")
     implementation("io.insert-koin:koin-logger-slf4j:$koin_version")
     testImplementation("io.insert-koin:koin-test:$koin_version")
     testImplementation(kotlin("test"))

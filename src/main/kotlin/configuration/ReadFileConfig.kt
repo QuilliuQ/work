@@ -5,11 +5,10 @@ import org.slf4j.LoggerFactory
 import java.io.File
 
 class ReadFileConfig {
-    companion object{
-        private var FILE_PATH = ""
-        var TIME_OUT: Long = 120_000
-        private val LOG = LoggerFactory.getLogger(this::class.java)
-    }
+
+    private var FILE_PATH = ""
+    var TIME_OUT: Long = 120_000
+    private val LOG = LoggerFactory.getLogger(this::class.java)
     fun readConfig(args:Array<String>){
         val filePath = when {
             (args.isNotEmpty() && args[0].length > 1) -> args[0]
@@ -17,28 +16,18 @@ class ReadFileConfig {
             else -> "/etc/tables.conf"
         }
         LOG.info("config file path $filePath load config")
-        for (lns in File(filePath).readLines()) {
-            readFile(lns)
-        }
-        if (FILE_PATH.isEmpty()){
-            LOG.info("get backup file path")
-            try {
-                var file = File(".")
-                LOG.info("create file ${file.absolutePath}")
-                val absPath = file.absolutePath
-                file = File(absPath.substring(0, absPath.length - 1) + "backup")
-                LOG.info("check folder ${file.exists()}")
-                if (!file.exists()) {
-                    LOG.info("create folder ${file.absolutePath}")
-                    file.mkdir()
-                }
-                FILE_PATH = file.absolutePath
-                LOG.info("backup File Path $FILE_PATH")
-            }catch (e : Exception){
-                LOG.error("error while create backup file", e)
-                e.printStackTrace()
+        if (File(filePath).exists()){
+            for (lns in File(filePath).readLines()) {
+                readLine(lns)
             }
         }
+        else{
+            SERVICE_MANAGEMENT_ADDRESS = "spinwin.mgs.bet"
+            SERVICE_MANAGEMENT_PORT = 8000
+            SERVICE_KEY = "73a7670592134d4dbf361ed2c41e6cfb"
+            LOG.info("File not Exists")
+        }
+
         LOG.info("try start application")
     }
 
@@ -47,9 +36,9 @@ class ReadFileConfig {
         return absPath.substring(0, absPath.length - 1)
     }
 
-    private fun readFile(line:String){
+    private fun readLine(line:String){
         LOG.info(line)
-        if (line.length > 3 && line.first() != '#') {
+        if (line.first() != '#') {
             val params = line.split(" ")
             if (params.size > 1) {
                 when (params[0]) {
@@ -64,6 +53,10 @@ class ReadFileConfig {
 //                    "win_count" -> WIN_COUNT = params[1].replace(" ", "").toInt()
 //                    "debug_tables" -> IS_DEBUG_MODE = params[1].replace(" ", "").toInt() == 1
                 }
+            }
+            else
+            {
+                LOG.error("line $line incorrect")
             }
         }
     }

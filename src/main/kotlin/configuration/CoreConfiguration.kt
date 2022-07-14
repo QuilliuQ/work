@@ -14,7 +14,7 @@ class CoreConfiguration(private val api: API_Platform) {
     private val LOG = LoggerFactory.getLogger(this::class.java)
 
     fun getConnection (): Connection {
-        LOG.info("host:port:key value: $SERVICE_MANAGEMENT_ADDRESS:$SERVICE_MANAGEMENT_PORT:$SERVICE_KEY")
+        LOG.info("host:$SERVICE_MANAGEMENT_ADDRESS port:$SERVICE_MANAGEMENT_PORT key value:$SERVICE_KEY")
         val connection = Connection(api)
         Timer().scheduleAtFixedRate(0, 15000) {
             LOG.info("Connecting...")
